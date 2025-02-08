@@ -26,7 +26,7 @@
 /atom/movable/renderer
 	abstract_type = /atom/movable/renderer
 	appearance_flags = DEFAULT_RENDERER_APPEARANCE_FLAGS
-	screen_loc = RENDERER_SCREEN_LOC
+	screen_loc = "CENTER"
 	plane = LOWEST_PLANE
 	blend_mode = BLEND_OVERLAY
 
@@ -63,6 +63,8 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	if (. == INITIALIZE_HINT_QDEL)
 		return
 	src.owner = owner
+	if (owner.client.byond_version > 515)
+		screen_loc = "1,1"
 	if (isnull(group))
 		if (istext(render_target_name))
 			render_target = render_target_name
@@ -72,7 +74,9 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	else if (render_target_name)
 		render_target = "*[ckey(name)]"
 	relay = new
-	relay.screen_loc = RENDERER_SCREEN_LOC
+	relay.screen_loc = "CENTER"
+	if (owner.client.byond_version > 515)
+		relay.screen_loc = "1,1"
 	relay.appearance_flags = PASS_MOUSE | NO_CLIENT_COLOR | KEEP_TOGETHER
 	relay.name = "[render_target] relay"
 	relay.mouse_opacity = mouse_opacity
@@ -211,14 +215,14 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	plane = BLACKNESS_PLANE
 	blend_mode = BLEND_MULTIPLY
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /atom/movable/renderer/space
 	name = "Space"
 	group = RENDER_GROUP_SCENE
 	plane = SPACE_PLANE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /atom/movable/renderer/skybox
@@ -226,13 +230,13 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	group = RENDER_GROUP_SCENE
 	plane = SKYBOX_PLANE
 	relay_blend_mode = BLEND_MULTIPLY
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /atom/movable/renderer/zmimic
 	name = "Zrenderer"
 	group = RENDER_GROUP_SCENE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED | RENDERER_SHARED_CUSTOM
+	renderer_flags = RENDERER_MAIN
 
 
 /atom/movable/renderer/zmimic/Initialize(mapload, _owner, _plane)
@@ -246,7 +250,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Game"
 	group = RENDER_GROUP_SCENE
 	plane = DEFAULT_PLANE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /// Draws observers; ghosts, camera eyes, etc.
@@ -254,7 +258,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Observers"
 	group = RENDER_GROUP_SCENE
 	plane = OBSERVER_PLANE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /// Draws darkness effects.
@@ -264,7 +268,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	plane = LIGHTING_PLANE
 	relay_blend_mode = BLEND_MULTIPLY
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /atom/movable/renderer/lighting/Initialize()
@@ -281,7 +285,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Above Lighting"
 	group = RENDER_GROUP_SCENE
 	plane = EFFECTS_ABOVE_LIGHTING_PLANE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /// Draws full screen visual effects, like pain and bluespace.
@@ -290,7 +294,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	group = RENDER_GROUP_SCENE
 	plane = FULLSCREEN_PLANE
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /// Draws user interface elements.
@@ -298,7 +302,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Interface"
 	group = RENDER_GROUP_SCREEN
 	plane = HUD_PLANE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /* *
@@ -325,7 +329,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Screen Group"
 	group = RENDER_GROUP_FINAL
 	plane = RENDER_GROUP_SCREEN
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /// Render group for final compositing before user display.
@@ -333,7 +337,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	name = "Final Group"
 	group = RENDER_GROUP_NONE
 	plane = RENDER_GROUP_FINAL
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /* *
@@ -353,7 +357,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	plane = WARP_EFFECT_PLANE
 	render_target_name = "*warp"
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 //Similar to warp but not as strong
@@ -440,7 +444,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/renderer)
 	plane = EMISSIVE_PLANE
 	mouse_opacity = MOUSE_OPACITY_UNCLICKABLE
 	render_target_name = EMISSIVE_TARGET
-	renderer_flags = RENDERER_MAIN | RENDERER_SHARED
+	renderer_flags = RENDERER_MAIN
 
 
 /atom/movable/renderer/emissive/Initialize()
